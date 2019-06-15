@@ -44,6 +44,14 @@ namespace Soat.Masterclass.Labs
                 string collectionId = Configuration["CosmosDB:collectionId"];
                 return new DocumentDBRepository<Item>(endpoint, key, databaseId, collectionId);
             });
+
+            services.AddSingleton<IStorageBlobHelper>(c => {
+                string accountName = Configuration["Storage:accountName"];
+                string accountKey = Configuration["Storage:accountKey"];
+                string container = Configuration["Storage:container"];
+
+                return new StorageBlobHelper(accountName, accountKey, container);
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
