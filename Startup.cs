@@ -9,8 +9,10 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Soat.Masterclass.Labs.Models.CosmosDB;
+using Soat.Masterclass.Labs.Repositories;
 
-namespace labs_intro_azure_data
+namespace Soat.Masterclass.Labs
 {
     public class Startup
     {
@@ -33,6 +35,15 @@ namespace labs_intro_azure_data
 
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+
+            services.AddSingleton<IDocumentDBRepository<Item>>(c => 
+            {
+                string endpoint = Configuration["CosmosDB:endpoint"];
+                string key = Configuration["CosmosDB:key"];
+                string databaseId = Configuration["CosmosDB:databaseId"];
+                string collectionId = Configuration["CosmosDB:collectionId"];
+                return new DocumentDBRepository<Item>(endpoint, key, databaseId, collectionId);
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

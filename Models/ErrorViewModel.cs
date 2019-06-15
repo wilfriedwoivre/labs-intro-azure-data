@@ -1,6 +1,6 @@
 using System;
 
-namespace labs_intro_azure_data.Models
+namespace Soat.Masterclass.Labs.Models
 {
     public class ErrorViewModel
     {

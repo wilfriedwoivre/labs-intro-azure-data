@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
-namespace labs_intro_azure_data
+namespace Soat.Masterclass.Labs
 {
     public class Program
     {

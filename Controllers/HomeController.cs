@@ -4,9 +4,9 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using labs_intro_azure_data.Models;
+using Soat.Masterclass.Labs.Models;
 
-namespace labs_intro_azure_data.Controllers
+namespace Soat.Masterclass.Labs.Controllers
 {
     public class HomeController : Controller
     {
