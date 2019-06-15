@@ -7,16 +7,16 @@ namespace Soat.Masterclass.Labs.Controllers
 {
     public class CosmosDBController : Controller
     {
-        private readonly IDocumentDBRepository<Item> Respository;
-        public CosmosDBController(IDocumentDBRepository<Item> Respository)
+        private readonly IDocumentDBRepository<Item> cosmosDBRepository;
+        public CosmosDBController(IDocumentDBRepository<Item> cosmosDBRepository)
         {
-            this.Respository = Respository;
+            this.cosmosDBRepository = cosmosDBRepository;
         }
 
         [ActionName("Index")]
         public async Task<IActionResult> Index()
         {
-            var items = await Respository.GetItemsAsync(d => !d.Completed);
+            var items = await cosmosDBRepository.GetItemsAsync(d => !d.Completed);
             return View(items);
         }
         
@@ -36,7 +36,7 @@ namespace Soat.Masterclass.Labs.Controllers
         {
             if (ModelState.IsValid)
             {
-                await Respository.CreateItemAsync(item);
+                await cosmosDBRepository.CreateItemAsync(item);
                 return RedirectToAction("Index");
             }
 
@@ -50,7 +50,7 @@ namespace Soat.Masterclass.Labs.Controllers
         {
             if (ModelState.IsValid)
             {
-                await Respository.UpdateItemAsync(item.Id, item);
+                await cosmosDBRepository.UpdateItemAsync(item.Id, item);
                 return RedirectToAction("Index");
             }
 
@@ -65,7 +65,7 @@ namespace Soat.Masterclass.Labs.Controllers
                 return BadRequest();
             }
 
-            Item item = await Respository.GetItemAsync(id);
+            Item item = await cosmosDBRepository.GetItemAsync(id);
             if (item == null)
             {
                 return NotFound();
@@ -82,7 +82,7 @@ namespace Soat.Masterclass.Labs.Controllers
                 return BadRequest();
             }
 
-            Item item = await Respository.GetItemAsync(id);
+            Item item = await cosmosDBRepository.GetItemAsync(id);
             if (item == null)
             {
                 return NotFound();
@@ -96,14 +96,14 @@ namespace Soat.Masterclass.Labs.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteConfirmedAsync([Bind("Id")] string id)
         {
-            await Respository.DeleteItemAsync(id);
+            await cosmosDBRepository.DeleteItemAsync(id);
             return RedirectToAction("Index");
         }
 
         [ActionName("Details")]
         public async Task<ActionResult> DetailsAsync(string id)
         {
-            Item item = await Respository.GetItemAsync(id);
+            Item item = await cosmosDBRepository.GetItemAsync(id);
             return View(item);
         }
     }
