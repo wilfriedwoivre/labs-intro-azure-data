@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Soat.Masterclass.Labs.Models.CosmosDB;
@@ -36,7 +37,7 @@ namespace Soat.Masterclass.Labs
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
-            services.AddSingleton<IDocumentDBRepository<Item>>(c => 
+            services.AddSingleton<IDocumentDBRepository<Item>>(c =>
             {
                 string endpoint = Configuration["CosmosDB:endpoint"];
                 string key = Configuration["CosmosDB:key"];
@@ -45,13 +46,20 @@ namespace Soat.Masterclass.Labs
                 return new DocumentDBRepository<Item>(endpoint, key, databaseId, collectionId);
             });
 
-            services.AddSingleton<IStorageBlobHelper>(c => {
+            services.AddSingleton<IStorageBlobHelper>(c =>
+            {
                 string accountName = Configuration["Storage:accountName"];
                 string accountKey = Configuration["Storage:accountKey"];
                 string container = Configuration["Storage:container"];
 
                 return new StorageBlobHelper(accountName, accountKey, container);
             });
+
+            services.AddDbContext<SqlDBContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("DbConnection")));
+
+            // Automatically perform database migration
+            services.BuildServiceProvider().GetService<SqlDBContext>().Database.Migrate();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
