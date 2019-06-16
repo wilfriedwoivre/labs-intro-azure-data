@@ -57,9 +57,12 @@ namespace Soat.Masterclass.Labs
 
             services.AddDbContext<SqlDBContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DbConnection")));
-
-            // Automatically perform database migration
-            services.BuildServiceProvider().GetService<SqlDBContext>().Database.Migrate();
+                
+            if (!string.IsNullOrWhiteSpace(Configuration.GetConnectionString("DbConnection")))
+            {
+                // Automatically perform database migration
+                services.BuildServiceProvider().GetService<SqlDBContext>().Database.Migrate();
+            }
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
