@@ -32,8 +32,12 @@
                 "name": "[variables('webAppName')]",
                 "serverFarmId": "[resourceId('Microsoft.Web/serverfarms/', variables('serverPlanName'))]",
                 "siteConfig": {
-                    "linuxFxVersion": "DOTNETCORE|2.2"
-                }
+                    "appSettings": [],
+                    "linuxFxVersion": "DOTNETCORE|2.2",
+                    "alwaysOn": false
+                },
+                "hostingEnvironment": "",
+                "clientAffinityEnabled": false
             },
             "resources": [
                 {
