@@ -21,6 +21,7 @@
             "apiVersion": "2018-02-01",
             "name": "[variables('webAppName')]",
             "location": "[resourceGroup().location]",
+            "kind": "app",
             "tags": {
                 "[concat('hidden-related:', resourceGroup().id, '/providers/Microsoft.Web/serverfarms/', variables('serverPlanName'))]": "Resource",
                 "displayName": "[variables('webAppName')]"
