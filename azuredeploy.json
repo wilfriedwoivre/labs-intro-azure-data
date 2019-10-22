@@ -30,15 +30,7 @@
                 "[concat('Microsoft.Web/serverfarms/', variables('serverPlanName'))]"
             ],
             "properties": {
-                "name": "[variables('webAppName')]",
-                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms/', variables('serverPlanName'))]",
-                "siteConfig": {
-                    "appSettings": [],
-                    "linuxFxVersion": "DOTNETCORE|2.2",
-                    "alwaysOn": false
-                },
-                "hostingEnvironment": "",
-                "clientAffinityEnabled": false
+                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms/', variables('serverPlanName'))]"
             },
             "resources": [
                 {
