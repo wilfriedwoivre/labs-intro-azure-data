@@ -1,0 +1,70 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "baseWebAppName": {
+            "type": "string",
+            "metadata": {
+                "description": "Base web app name"
+            }
+        }
+    },
+    "variables": {
+        "serverPlanName": "[concat('linuxplan', uniqueString(resourceGroup().name))]",
+        "webAppName": "[concat(parameters('baseWebAppName'), uniqueString(resourceGroup().name))]",
+        "repoUrl": "https://github.com/wilfriedwoivre/labs-intro-azure-data",
+        "branch": "master"
+    },
+    "resources": [
+        {
+            "type": "Microsoft.Web/sites",
+            "apiVersion": "2018-02-01",
+            "name": "[variables('webAppName')]",
+            "location": "[resourceGroup().location]",
+            "kind": "app",
+            "tags": {
+                "[concat('hidden-related:', resourceGroup().id, '/providers/Microsoft.Web/serverfarms/', variables('serverPlanName'))]": "Resource",
+                "displayName": "[variables('webAppName')]"
+            },
+            "dependsOn": [
+                "[concat('Microsoft.Web/serverfarms/', variables('serverPlanName'))]"
+            ],
+            "properties": {
+                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms/', variables('serverPlanName'))]"
+            },
+            "resources": [
+                {
+                    "apiVersion": "2015-08-01",
+                    "name": "web",
+                    "type": "sourcecontrols",
+                    "dependsOn": [
+                        "[resourceId('Microsoft.Web/Sites', variables('webAppName'))]"
+                    ],
+                    "properties": {
+                        "RepoUrl": "[variables('repoURL')]",
+                        "branch": "[variables('branch')]",
+                        "IsManualIntegration": true
+                    }
+                }
+            ]
+        },
+        {
+            "type": "Microsoft.Web/serverfarms",
+            "apiVersion": "2018-02-01",
+            "name": "[variables('serverPlanName')]",
+            "location": "[resourceGroup().location]",
+            "sku": {
+                "name": "B1",
+                "capacity": 1
+            },
+            "kind": "linux",
+            "tags": {
+                "displayName": "[variables('serverPlanName')]"
+            },
+            "properties": {
+                "name": "[variables('serverPlanName')]"
+            }
+        }
+    ],
+    "outputs": {}
+}
